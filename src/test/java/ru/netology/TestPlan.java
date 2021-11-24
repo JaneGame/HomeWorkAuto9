@@ -1,6 +1,7 @@
 package ru.netology;
 
-import com.github.javafaker.Faker;
+
+import lombok.Value;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,48 +21,22 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.Selenide.$;
+import com.github.javafaker.Faker;
 
 public class TestPlan {
-    private static Faker faker;
-    private WebDriver driver;
-
-    @BeforeAll
-    static void setupAll() {
-        System.setProperty("webdriver.chrome.driver", "./drivers/chromedriver(2).exe");
-        faker = new Faker(new Locale("ru"));
-    }
-
-    @BeforeEach
-    void setUp() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--headless");
-        driver = new ChromeDriver();
-    }
-
-    @AfterEach
-    void tearDown() {
-        driver.quit();
-        driver = null;
-    }
-
-    String city = faker.address().city();
-    String name = faker.name().fullName();
-    String phone = faker.phoneNumber().subscriberNumber(11);
-    Date date = faker.date().future(10, 3, TimeUnit.DAYS);
-
 
     @Test
     public void formTest() {
         open("http://localhost:9999");
         $$("[type='text']").exclude(hidden).first().setValue(city);
+        $$("[type='tel']").exclude(hidden).first().doubleClick();
         $$("[type='tel']").exclude(hidden).first().setValue(String.valueOf(date));
         $$("[type='text']").exclude(hidden).last().setValue(name);
         $$("[type='tel']").exclude(hidden).last().setValue(phone);
         $(withText("соглашаюсь")).click();
         $(byText("Запланировать")).click();
         $(".notification").shouldBe(appear, Duration.ofSeconds(15));
+        $$("[type='tel']").exclude(hidden).first().doubleClick();
         $$("[type='tel']").exclude(hidden).first().setValue(String.valueOf(date));
         $(byText("Запланировать")).click();
         $(byText("Перепланировать")).click();
