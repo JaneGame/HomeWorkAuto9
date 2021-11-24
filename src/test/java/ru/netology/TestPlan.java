@@ -28,16 +28,21 @@ public class TestPlan {
     @Test
     public void formTest() {
         open("http://localhost:9999");
-        $$("[type='text']").exclude(hidden).first().setValue(city);
+        var validUser = DataGenerator.Registration.generateUser("ru");
+        var daysToAddForFirstMeeting = 4;
+        var firstMeetingDate = DataGenerator.generateDate(daysToAddForFirstMeeting);
+        var daysToAddForSecondMeeting = 7;
+        var secondMeetingDate = DataGenerator.generateDate(daysToAddForSecondMeeting);
+        $$("[type='text']").exclude(hidden).first().setValue(validUser.getCity());
         $$("[type='tel']").exclude(hidden).first().doubleClick();
-        $$("[type='tel']").exclude(hidden).first().setValue(String.valueOf(date));
-        $$("[type='text']").exclude(hidden).last().setValue(name);
-        $$("[type='tel']").exclude(hidden).last().setValue(phone);
+        $$("[type='tel']").exclude(hidden).first().setValue(firstMeetingDate);
+        $$("[type='text']").exclude(hidden).last().setValue(validUser.getName());
+        $$("[type='tel']").exclude(hidden).last().setValue(validUser.getPhone());
         $(withText("соглашаюсь")).click();
         $(byText("Запланировать")).click();
         $(".notification").shouldBe(appear, Duration.ofSeconds(15));
         $$("[type='tel']").exclude(hidden).first().doubleClick();
-        $$("[type='tel']").exclude(hidden).first().setValue(String.valueOf(date));
+        $$("[type='tel']").exclude(hidden).first().setValue(secondMeetingDate);
         $(byText("Запланировать")).click();
         $(byText("Перепланировать")).click();
         $(".notification").shouldBe(appear, Duration.ofSeconds(15));
