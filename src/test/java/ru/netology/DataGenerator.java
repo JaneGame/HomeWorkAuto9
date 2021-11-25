@@ -10,6 +10,7 @@ import com.github.javafaker.Faker;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Random;
 
 
 public class DataGenerator {
@@ -23,9 +24,11 @@ public class DataGenerator {
         return LocalDate.now().plusDays(days).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
     }
 
-    public static String generateCity(String locale) {
-        faker = new Faker(new Locale(locale));
-        String city = faker.address().city();
+    public static String generateCity() {
+        String cities[] = {"Москва", "Псков", "Владивосток"};
+        int i = cities.length-1;
+        int x = (int)(Math.random()*((i-0)+1))+0;
+        String city = cities[x];
         return city;
     }
 
@@ -49,7 +52,7 @@ public class DataGenerator {
 
 
         public static UserInfo generateUser(String locale) {
-            String city = generateCity(locale);
+            String city = generateCity();
             String name = generateName(locale);
             String phone = generatePhone(locale);
             DataGenerator.UserInfo user = new UserInfo(city, name, phone);
