@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.Value;
 
 import com.github.javafaker.Faker;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -51,23 +52,19 @@ public class DataGenerator {
             String city = generateCity(locale);
             String name = generateName(locale);
             String phone = generatePhone(locale);
-            UserInfo user = new UserInfo(city, name, phone);
+            DataGenerator.UserInfo user = new UserInfo(city, name, phone);
             return user;
         }
 
     }
 
     @Value
-    @Data
+
     public static class UserInfo {
         String city;
         String name;
         String phone;
 
-        public UserInfo(String city, String name, String phone) {
-            this.city = city;
-            this.name = name;
-            this.phone = phone;
-        }
+
     }
 }
